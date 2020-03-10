@@ -1,16 +1,31 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
+const cors = require('cors');
+const ytdl = require('ytdl-core');
 const app = express();
 
+// Utility imports
+const path = require('path');
+
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(cors());
 
-app.get('/ping', function (req, res) {
- return res.send('pong');
+app.listen(process.env.PORT || 8080, () => {
+
+  console.log(`Server started at port ${process.env.PORT || 8080}`);
+
 });
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// processing download request
+app.get('/download', function (req, res) {
 
-app.listen(process.env.PORT || 8080);
+  var videoURL = req.query.video_url;
+
+  console.log(videoURL);
+
+  // attaching header to the response
+  res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+
+  // using ytdl to pipe the download to the client
+  ytdl(videoURL, { format : 'mp4' }).pipe(res);
+
+});
