@@ -5,46 +5,48 @@ import { TextField } from '@material-ui/core';
 
 export default class App extends React.Component
 {
-  constructor()
+  constructor(props)
   {
-    super();
+    super(props);
 
-    this.resetSelectedOptions();
+    // Setting initial state
+    this.state = {
+      url : "",
+      selectedQuality : "",
+      selectedFormat : "" 
+    };
   }
 
-  resetSelectedOptions()
+  handleOnURLChanged(event)
   {
-    this.selectedQuality = "";
-    this.selectedFormat = "";
+    const url = event.target.value;
+    this.setState({ url });
   }
 
-  onURLChanged()
+  handleOnQualitySelected(value)
   {
-    
+    const selectedQuality = value;
+    this.setState({ selectedQuality });
   }
 
-  onQualitySelected()
+  handleOnFormatSelected(value)
   {
-
-  }
-
-  onFormatSelected()
-  {
-
+    const selectedFormat = value;
+    this.setState({ selectedFormat });
   }
 
   render()
   {
     return (
 
-      <div className="background">
-        <header className="app-title">
-          Youtube Downloader
-        </header>
-        <TextField label="URL" variant="standard" type="string" onChange={() => { this.onURLChanged(); }}/>
-        <ListSelect title="Quality" options={[10, 20, 30]} onSelectedOption={() => { this.onQualitySelected(); }}/>
-        <ListSelect title="Format" options={["mp4", "mov"]} onSelectedOption={() => { this.onFormatSelected(); }}/>
-      </div>
+        <div className="background">
+          <header className="app-title">
+            Youtube Downloader
+          </header>
+          <TextField label="URL" variant="standard" type="string" inputProps={{color:'white'}} onChange={this.handleOnURLChanged.bind(this)}/>
+          <ListSelect title="Quality" options={[10, 20, 30]} onChange={this.handleOnQualitySelected.bind(this)}/>
+          <ListSelect title="Format" options={["mp4", "mov"]} onChange={this.handleOnFormatSelected.bind(this)}/>
+        </div>
     
     );
   }
