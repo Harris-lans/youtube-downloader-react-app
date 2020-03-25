@@ -1,7 +1,9 @@
 import './App.css';
 import React from 'react';
-import ListSelect from './ListSelect.js'
-import { TextField } from '@material-ui/core';
+import ListSelect from './ListSelect.js';
+import TextField from './TextField.js';
+import Card from 'react-bootstrap/Card';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default class App extends React.Component
 {
@@ -17,9 +19,9 @@ export default class App extends React.Component
     };
   }
 
-  handleOnURLChanged(event)
+  handleOnURLChanged(value)
   {
-    const url = event.target.value;
+    const url = value;
     this.setState({ url });
   }
 
@@ -39,14 +41,18 @@ export default class App extends React.Component
   {
     return (
 
-        <div className="background">
-          <header className="app-title">
-            Youtube Downloader
-          </header>
-          <TextField label="URL" variant="standard" type="string" inputProps={{color:'white'}} onChange={this.handleOnURLChanged.bind(this)}/>
-          <ListSelect title="Quality" options={[10, 20, 30]} onChange={this.handleOnQualitySelected.bind(this)}/>
-          <ListSelect title="Format" options={["mp4", "mov"]} onChange={this.handleOnFormatSelected.bind(this)}/>
+      <div className="background">
+        <header className="app-header">Youtube Downloader</header>
+        <div className="app-body">
+          <Card>
+            <Card.Body>
+              <TextField label="URL" subText="Enter the URL of the video you want to download" inputMode="url" onChange={this.handleOnURLChanged.bind(this)}/>
+              <ListSelect title="Quality" options={[10, 20, 30]} onChange={this.handleOnQualitySelected.bind(this)}/>
+              <ListSelect title="Format" options={["mp4", "mov"]} onChange={this.handleOnFormatSelected.bind(this)}/>
+            </Card.Body>
+          </Card>
         </div>
+      </div>
     
     );
   }

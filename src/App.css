@@ -1,20 +1,45 @@
 @import url(https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap);
 
+*
+{
+  color: white;
+}
+
 .background
 {
   width: 100vw;
   height: 100vh;
+  display: flex;
+  flex-flow: column;
   background-color: #000000;
+  
 }
 
-.app-title
+.app-header
 {
   color: white;
+  text-align: center;
   font-family: 'Bebas Neue', cursive;
   font-size: 40pt;
+  width: 100%;
+  padding: 1rem;
 }
 
-.app-logo
+.app-body
 {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.2rem;
+}
 
+.app-body .card
+{
+  display: inline-block;
+  border-radius: 10px;
+  width: 50vw;
+  background-color: rgb(37, 37, 37);
+  vertical-align: middle;
 }
