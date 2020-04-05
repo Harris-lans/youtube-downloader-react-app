@@ -15,17 +15,17 @@ app.listen(process.env.PORT || 8080, () => {
 
 });
 
-// processing download request
+// Processing download request
 app.get('/download', function (req, res) {
 
   var videoURL = req.query.video_url;
 
   console.log(videoURL);
 
-  // attaching header to the response
+  // Attaching header to the response
   res.header('Content-Disposition', 'attachment; filename="video.mp4"');
 
-  // using ytdl to pipe the download to the client
+  // Using ytdl to pipe the download to the client
   ytdl(videoURL, { format : 'mp4' }).pipe(res);
 
 });

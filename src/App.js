@@ -15,7 +15,7 @@ export default class App extends React.Component
     this.state = {
       url : "",
       selectedQuality : "",
-      selectedFormat : "" 
+      selectedFormat : ""
     };
   }
 
@@ -47,13 +47,15 @@ export default class App extends React.Component
           <Card>
             <Card.Body>
               <TextField label="URL" subText="Enter the URL of the video you want to download" inputMode="url" onChange={this.handleOnURLChanged.bind(this)}/>
-              <ListSelect title="Quality" options={[10, 20, 30]} onChange={this.handleOnQualitySelected.bind(this)}/>
-              <ListSelect title="Format" options={["mp4", "mov"]} onChange={this.handleOnFormatSelected.bind(this)}/>
+              <div className="options-container">
+                <ListSelect title="Quality" loading={false} options={["10", "20", "30"]} onSelect={this.handleOnQualitySelected.bind(this)}/>
+                <ListSelect title="Format" loading={false} options={[".mp4", ".mov"]} onSelect={this.handleOnFormatSelected.bind(this)}/>
+              </div>
             </Card.Body>
           </Card>
         </div>
       </div>
-    
+
     );
   }
 }

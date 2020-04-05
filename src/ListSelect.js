@@ -1,5 +1,9 @@
 import './ListSelect.css';
 import React from 'react';
+import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+import Dropdown from 'react-bootstrap/Dropdown';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 export default class ListSelect extends React.Component
 {
@@ -9,30 +13,58 @@ export default class ListSelect extends React.Component
         
         // Setting initial state
         this.state = { 
-            value : ""
+            selectedValue : "",
+            active : false
         };
     }
 
-    handleOnChange(event)
+    handleOnSelect(eventKey, event)
     {
-        const value = event.target.value;
-        this.setState({ value });
+        const selectedValue = eventKey;
+        this.setState({ selectedValue });
 
         // Invoking onChange callback
-        this.props.onChange(value);
+        this.props.onSelect(selectedValue);
     }
 
     render()
     {
-        // const optionsList = this.props.options.map((value, index)=> {
+        const options = this.props.options.map((value, index)=> {
 
-        //     return <MenuItem key={index.toString()} value={value}>{value}</MenuItem>;
+            let isOptionSelected = (value.localeCompare(this.state.selectedValue) === 0);
+            return <Dropdown.Item className="dropdown-item" active={isOptionSelected} key={index.toString()} eventKey={value} onSelect={this.handleOnSelect.bind(this)}>{value}</Dropdown.Item>;
         
-        // });
+        });
+
+        let selectedOption;
+        
+        if (this.props.loading)
+        {
+            selectedOption = <Spinner animation="border" size="sm" variant="light"/>;
+        }
+        else
+        {
+            selectedOption = this.state.selectedValue;
+        }
 
         return (
 
-            <div></div>
+            <div className="list-select dropdown-container">
+                <InputGroup>
+                    <InputGroup.Prepend>
+                        <InputGroup.Text>{this.props.title}</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Dropdown as={InputGroup.Append}>
+                        <Button>
+                            {selectedOption}
+                        </Button>
+                        <Dropdown.Toggle split />
+                        <Dropdown.Menu>
+                            {options}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </InputGroup>
+            </div>
 
         );
     }
