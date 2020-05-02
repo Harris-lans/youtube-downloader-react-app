@@ -34,6 +34,16 @@
   padding: 1.2rem;
 }
 
+.app-body .card-title
+{
+  margin: 2rem;
+}
+
+.app-body .card-body
+{
+  margin: 0.75rem;
+}
+
 .app-body .card
 {
   display: inline-block;

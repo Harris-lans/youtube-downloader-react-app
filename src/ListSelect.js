@@ -27,8 +27,35 @@ export default class ListSelect extends React.Component
         this.props.onSelect(selectedValue);
     }
 
+    tryFillingInInitialValue()
+    {
+        let noOptionsSelected = true;
+        this.props.options.forEach(element => {
+
+            let isOptionSelected = (element.localeCompare(this.state.selectedValue) === 0);
+            noOptionsSelected = noOptionsSelected && !isOptionSelected;
+
+        });
+
+        if (noOptionsSelected && this.props.options.length > 0)
+        {
+            this.handleOnSelect(this.props.options[0]);
+        }
+    }
+
+    componentDidMount()
+    {
+        this.tryFillingInInitialValue();
+    }
+
+    componentDidUpdate()
+    {
+        this.tryFillingInInitialValue();
+    }
+
     render()
     {
+        // Generating options
         const options = this.props.options.map((value, index)=> {
 
             let isOptionSelected = (value.localeCompare(this.state.selectedValue) === 0);
@@ -36,6 +63,7 @@ export default class ListSelect extends React.Component
         
         });
 
+        // Handling loading condition
         let selectedOption;
         
         if (this.props.loading)
@@ -58,7 +86,7 @@ export default class ListSelect extends React.Component
                         <Button>
                             {selectedOption}
                         </Button>
-                        <Dropdown.Toggle split />
+                        <Dropdown.Toggle split/>
                         <Dropdown.Menu>
                             {options}
                         </Dropdown.Menu>

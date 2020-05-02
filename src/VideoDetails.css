@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand|Sen&display=swap');
+
+.video-details
+{
+    font-family: 'Sen', sans-serif;
+}
+
+.video-thumbnail
+{
+    height: 150px;
+    width: auto;
+    display: inline-block;
+}
+
+.video-details-container
+{
+    margin-left: 1rem;
+    display: inline-block;
+}
+
+.video-name
+{
+    font-weight: bolder;
+    font-size: 2rem;
+}
+
+.video-channel
+{
+    font-weight: lighter;
+    font-size: 1.3rem;
+}
+
+.video-upload-date
+{
+    font-weight: lighter;
+    font-size: 0.9rem;
+}
