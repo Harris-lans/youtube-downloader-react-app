@@ -1,4 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap);
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand|Sen&display=swap');
 
 *
 {
@@ -68,4 +69,36 @@
 {
   content: '';
   width: 3rem;
+}
+
+.button-container
+{
+  text-align: center;
+}
+
+.invalidity-message
+{
+  text-align: center;
+  font-family: 'Sen', sans-serif;
+  color: #ff2a2a;
+  font-size: 1.3rem;
+}
+
+.inline-block
+{
+  display: inline-block;
+}
+
+.loading-spinner-box
+{
+  display: flex;
+}
+
+.loading-spinner-box *
+{
+  font-family: 'Sen', sans-serif;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
 }

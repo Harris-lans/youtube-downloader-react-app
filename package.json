@@ -9,7 +9,6 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "cors": "^2.8.5",
-    "eslint": "^6.8.0",
     "express": "^4.17.1",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.17",
@@ -40,6 +39,7 @@
   },
   "proxy": "http://localhost:8080",
   "devDependencies": {
+    "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.19.0"
   }
 }

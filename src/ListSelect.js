@@ -13,33 +13,30 @@ export default class ListSelect extends React.Component
         
         // Setting initial state
         this.state = { 
-            selectedValue : "",
+            selectedID : -1,
             active : false
         };
     }
 
     handleOnSelect(eventKey, event)
     {
-        const selectedValue = eventKey;
-        this.setState({ selectedValue });
-
+        const selectedID = eventKey;
+        this.setState({ selectedID });
+        const selectedValue = this.props.options.find(element => element.id == selectedID)?.value;
+       
         // Invoking onChange callback
-        this.props.onSelect(selectedValue);
+        this.props.onSelect(selectedID, selectedValue);
     }
 
     tryFillingInInitialValue()
     {
-        let noOptionsSelected = true;
-        this.props.options.forEach(element => {
-
-            let isOptionSelected = (element.localeCompare(this.state.selectedValue) === 0);
-            noOptionsSelected = noOptionsSelected && !isOptionSelected;
-
-        });
-
+        // Checking 
+        let noOptionsSelected = this.props.options.find(element => element.id == this.state.selectedID) == null;
+        
+        // Selecting first option if no options are selected
         if (noOptionsSelected && this.props.options.length > 0)
         {
-            this.handleOnSelect(this.props.options[0]);
+            this.handleOnSelect(this.props.options[0].id);
         }
     }
 
@@ -56,10 +53,10 @@ export default class ListSelect extends React.Component
     render()
     {
         // Generating options
-        const options = this.props.options.map((value, index)=> {
+        const options = this.props.options.map((element)=> {
 
-            let isOptionSelected = (value.localeCompare(this.state.selectedValue) === 0);
-            return <Dropdown.Item className="dropdown-item" active={isOptionSelected} key={index.toString()} eventKey={value} onSelect={this.handleOnSelect.bind(this)}>{value}</Dropdown.Item>;
+            let isOptionSelected = element.id === this.state.selectedID;
+            return <Dropdown.Item className="dropdown-item" active={isOptionSelected} key={element.id} eventKey={element.id} onSelect={this.handleOnSelect.bind(this)}>{element.value}</Dropdown.Item>;
         
         });
 
@@ -72,7 +69,7 @@ export default class ListSelect extends React.Component
         }
         else
         {
-            selectedOption = this.state.selectedValue;
+            selectedOption = this.props.options.find(element => element.id == this.state.selectedID)?.value;
         }
 
         return (

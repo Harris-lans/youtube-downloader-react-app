@@ -28,12 +28,13 @@ app.get('/', function (req, res) {
 app.get('/download-video', function (req, res) {
 
   const videoURL = req.query.videoURL;
+  const qualityTag = req.query.qualityTag;
 
   // Attaching header to the response
   res.header('Content-Disposition', 'attachment; filename="video.mp4"');
 
   // Using ytdl to pipe the download to the client
-  ytdl(videoURL).pipe(res);
+  ytdl(videoURL, { quality : qualityTag }).pipe(res);
 
 });
 
@@ -66,7 +67,7 @@ app.get('/video-details', function (req, res) {
       title:          info.title,
       channelName:    info.author.name,
       uploadDate:     parseDateFromEpochToString(info.published),
-      thumbnail:      parseVideoThumbnailURL(info.video_id),
+      thumbnailURL:      parseVideoThumbnailURL(info.video_id),
       qualityOptions: parseVideoQualities(info.formats),
     };
 
