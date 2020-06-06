@@ -1,11 +1,12 @@
 const express = require('express');
 const ytdl = require('ytdl-core');
 const cors = require('cors');
+
 const app = express();
 
 // Utility imports
-const path = require('path');
 const port = 1300;
+const path = require('path');
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -29,12 +30,16 @@ app.get('/download-video', function (req, res) {
 
   const videoURL = req.query.videoURL;
   const qualityTag = req.query.qualityTag;
+  
+  ytdl.getInfo(videoURL).then((info) => {
 
-  // Attaching header to the response
-  res.header('Content-Disposition', 'attachment; filename="video.mp4"');
+    // Attaching header to the response
+    res.header('Content-Disposition', `attachment; filename="${info.title}.mp4"`);
 
-  // Using ytdl to pipe the download to the client
-  ytdl(videoURL, { quality : qualityTag }).pipe(res);
+    // Using ytdl to pipe the download to the client
+    ytdl(videoURL, { quality : qualityTag }).pipe(res);
+
+  });
 
 });
 
@@ -92,7 +97,7 @@ function parseVideoThumbnailURL(videoID)
 function parseVideoQualities(formats)
 {
   // Filtering out only video formats with itags
-  const firstPassFilteredQualities = formats.filter((element) => { return (element.container === "mp4" && element.qualityLabel != null) });
+  const firstPassFilteredQualities = formats.filter((element) => { return (element.container === "mp4" && element.qualityLabel != null && element.audioBitrate != null) });
   const secondPassFilteredQualities = firstPassFilteredQualities.sort((a, b) => { return b.bitrate - a.bitrate });
   const thirdPassFilteredQualities = secondPassFilteredQualities.map((element) => {
     

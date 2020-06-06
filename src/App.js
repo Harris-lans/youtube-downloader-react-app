@@ -9,6 +9,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const axios = require('axios').default;
+const serverURL = process.env.NODE_ENV === 'development' ? 'http://localhost:1300' : '';
 
 export default class App extends React.Component
 {
@@ -37,7 +38,7 @@ export default class App extends React.Component
 
 		if (!this.isStringEmpty(url))
 		{
-			const response = await axios.get('http://localhost:1300/verify-url', {
+			const response = await axios.get(`${serverURL}/verify-url`, {
 
 				responseType: 'json',
 				params:{
@@ -58,7 +59,7 @@ export default class App extends React.Component
 
 		if (!this.isStringEmpty(url))
 		{
-			const response = await axios.get('http://localhost:1300/video-details', {
+			const response = await axios.get(`${serverURL}/video-details`, {
 
 				responseType: 'json',
 				params:{
@@ -75,28 +76,7 @@ export default class App extends React.Component
 
 	requestVideoDownload(url, qualityTag)
 	{
-		if (!this.isStringEmpty(url))
-		{
-			axios.get('http://localhost:1300/download-video', {
-
-				responseType: 'blob',
-				params:{
-					videoURL: url,
-					qualityTag: qualityTag
-				}
-
-			}).then( (response) => {
-				
-				const url = window.URL.createObjectURL(new Blob([response.data], { type: "octet/stream"}));
-				const link = document.createElement('a');
-				document.body.appendChild(link);
-				link.href = url;
-				link.download = "video.mp4"
-				// link.setAttribute('download');
-				link.click();
-				window.URL.revokeObjectURL(url);
-			});
-		}
+		window.location = `${serverURL}/download-video?videoURL=${url}&qualityTag=${qualityTag}`;
 	}
 
 	handleOnURLChanged(value)
