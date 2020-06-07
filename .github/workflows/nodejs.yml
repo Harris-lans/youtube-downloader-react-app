@@ -61,5 +61,6 @@ jobs:
               name: dist
         - name: Deploying to Firebase
           run: |
-            ls
+            cd functions
+            npm install
             firebase deploy --project ${{secrets.FIREBASE_PROJECT_ID}} --token ${{secrets.FIREBASE_TOKEN}}
