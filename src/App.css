@@ -13,6 +13,8 @@
   display: flex;
   flex-flow: column;
   background-color: #000000;
+  background-image: url("/background.png");
+  background-attachment: fixed;
 }
 
 .app-header
@@ -50,7 +52,7 @@
   display: inline-block;
   border-radius: 10px;
   width: 50vw;
-  background-color: rgb(37, 37, 37);
+  background-color: rgba(37, 37, 37, 0.75);
   vertical-align: middle;
 }
 

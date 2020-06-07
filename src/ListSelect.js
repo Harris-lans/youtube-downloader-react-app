@@ -20,9 +20,9 @@ export default class ListSelect extends React.Component
 
     handleOnSelect(eventKey, event)
     {
-        const selectedID = eventKey;
+        const selectedID = eventKey.toString();
         this.setState({ selectedID });
-        const selectedValue = this.props.options.find(element => element.id == selectedID)?.value;
+        const selectedValue = this.props.options.find(element => element.id.toString() === selectedID)?.value;
        
         // Invoking onChange callback
         this.props.onSelect(selectedID, selectedValue);
@@ -31,7 +31,7 @@ export default class ListSelect extends React.Component
     tryFillingInInitialValue()
     {
         // Checking 
-        let noOptionsSelected = this.props.options.find(element => element.id == this.state.selectedID) == null;
+        let noOptionsSelected = this.props.options.find(element => element.id.toString() === this.state.selectedID) == null;
         
         // Selecting first option if no options are selected
         if (noOptionsSelected && this.props.options.length > 0)
@@ -56,7 +56,7 @@ export default class ListSelect extends React.Component
         const options = this.props.options.map((element)=> {
 
             let isOptionSelected = element.id === this.state.selectedID;
-            return <Dropdown.Item className="dropdown-item" active={isOptionSelected} key={element.id} eventKey={element.id} onSelect={this.handleOnSelect.bind(this)}>{element.value}</Dropdown.Item>;
+            return <Dropdown.Item className="dropdown-item" active={isOptionSelected} key={element.id.toString()} eventKey={element.id.toString()} onSelect={this.handleOnSelect.bind(this)}>{element.value}</Dropdown.Item>;
         
         });
 
@@ -69,7 +69,7 @@ export default class ListSelect extends React.Component
         }
         else
         {
-            selectedOption = this.props.options.find(element => element.id == this.state.selectedID)?.value;
+            selectedOption = this.props.options.find(element => element.id.toString() === this.state.selectedID)?.value;
         }
 
         return (
