@@ -28,17 +28,17 @@ jobs:
       run: npm install
     - name: Building Application
       run: npm run build
-    # - name: Preparing built files for uploading
-    #   run: |
-    #     mkdir out
-    #     cp -R build out/
-    #     cp -R functions out/
-    #     cp firebase.json out/
-    # - name: Uploading built files for deployment
-    #   uses: actions/upload-artifact@master
-    #   with:
-    #     name: out
-    #     path: out
+    - name: Preparing built files for uploading
+      run: |
+        mkdir out
+        cp -R build out/
+        cp -R functions out/
+        cp firebase.json out/
+    - name: Uploading built files for deployment
+      uses: actions/upload-artifact@master
+      with:
+        name: out
+        path: out
 
   deploy:
       name: Deploy
@@ -55,7 +55,7 @@ jobs:
             node-version: ${{ matrix.node-version }}
         - name: Setting up Firebase
           run: npm install -g firebase-tools
-        - name: Downloading files
+        - name: Downloading built files
           uses: actions/download-artifact@master
           with:
               name: out
