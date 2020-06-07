@@ -28,17 +28,17 @@ jobs:
       run: npm install
     - name: Building Application
       run: npm run build
-    - name: Preparing built files for uploading
-      run: |
-        mkdir out
-        cp -R build out/
-        cp -R functions out/
-        cp firebase.json out/
-    - name: Uploading built files for deployment
-      uses: actions/upload-artifact@master
-      with:
-        name: out
-        path: out
+    # - name: Preparing built files for uploading
+    #   run: |
+    #     mkdir out
+    #     cp -R build out/
+    #     cp -R functions out/
+    #     cp firebase.json out/
+    # - name: Uploading built files for deployment
+    #   uses: actions/upload-artifact@master
+    #   with:
+    #     name: out
+    #     path: out
 
   deploy:
       name: Deploy
@@ -62,4 +62,4 @@ jobs:
         - name: Deploying to Firebase
           run: |
             cd out
-            firebase deploy --project${{secrets.FIREBASE_PROJECT_ID}} --token ${{secrets.FIREBASE_TOKEN}}
+            firebase deploy --project ${{secrets.FIREBASE_PROJECT_ID}} --token ${{secrets.FIREBASE_TOKEN}}
