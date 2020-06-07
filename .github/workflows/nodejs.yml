@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-
+    name: Build
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,8 +26,21 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build
-    - uses: w9jds/firebase-action@master
-      with:
-        args: deploy
-      env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  
+  deploy:
+      name: Deploy
+      needs: build
+      runs-on: ubuntu-latest
+
+      strategy:
+        matrix:
+          node-version: [12.x]
+
+      steps:
+        - name: Setting up Firebase
+          uses: actions/setup-node@master
+          with:
+            node-version: ${{ matrix.node-version }}
+          run: npm install -g firebase-tools
+        - name: Deploying to Firebase
+          run: firebase deploy --token ${{secrets.FIREBASE_TOKEN}}
