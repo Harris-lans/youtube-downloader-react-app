@@ -30,15 +30,15 @@ jobs:
       run: npm run build
     - name: Preparing built files for uploading
       run: |
-        mkdir out
-        cp -R build out/
-        cp -R functions out/
-        cp firebase.json out/
-    - name: Uploading built files for deployment
+        mkdir dist
+        cp -R build dist/
+        cp -R functions dist/
+        cp firebase.json dist/
+    - name: Uploading built files for distribution
       uses: actions/upload-artifact@master
       with:
-        name: out
-        path: out
+        name: dist
+        path: dist
 
   deploy:
       name: Deploy
@@ -55,11 +55,11 @@ jobs:
             node-version: ${{ matrix.node-version }}
         - name: Setting up Firebase
           run: npm install -g firebase-tools
-        - name: Downloading built files
+        - name: Downloading distribution files
           uses: actions/download-artifact@master
           with:
-              name: out
+              name: dist
         - name: Deploying to Firebase
           run: |
-            cd out
+            cd /dist
             firebase deploy --project ${{secrets.FIREBASE_PROJECT_ID}} --token ${{secrets.FIREBASE_TOKEN}}
