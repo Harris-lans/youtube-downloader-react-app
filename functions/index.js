@@ -4,9 +4,6 @@ const ytdl = require('ytdl-core');
 const cors = require('cors');
 const path = require('path');
 
-// Create and Deploy Your First Cloud Functions
-// https://firebase.google.com/docs/functions/write-firebase-functions
-
 const app = express();
 app.use(cors());
 
@@ -50,72 +47,81 @@ app.get('/', (req, res) => {
 // Processing download request
 app.get('/download-video', (req, res) => {
 
-const videoURL = req.query.videoURL;
-const qualityTag = req.query.qualityTag;
+    const videoURL = req.query.videoURL;
+    const qualityTag = req.query.qualityTag;
 
-ytdl.getInfo(videoURL).then((info) => {
+    ytdl.getInfo(videoURL).then((info) => {
 
-    // Attaching header to the response
-    res.header('Content-Disposition', `attachment; filename="${info.title}.mp4"`);
+        // Attaching header to the response
+        res.header('Content-Disposition', `attachment; filename="${info.title}.mp4"`);
 
-    // Using ytdl to pipe the download to the client
-    ytdl(videoURL, { quality : qualityTag }).pipe(res);
+        // Using ytdl to pipe the download to the client
+        ytdl(videoURL, { quality : qualityTag }).pipe(res);
 
-    return null;
+        return null;
 
-}).catch(() => {
-    console.log("Failed to download video!")
-});
+    }).catch(() => {
+
+        res.send("Failed to download video!");
+
+    });
 
 });
 
 app.get('/verify-url', (req, res) => {
 
-const url = req.query.url;
+    const url = req.query.url;
 
-// Attaching the header to the response
-res.header('Validity');
+    // Attaching the header to the response
+    res.header('Validity');
 
-// Querying the validity
-const response = { isValid : ytdl.validateURL(url) };
+    try 
+    {
+      // Querying the validity
+      const response = { isValid : ytdl.validateURL(url) };
 
-// Attaching the json va
-res.json(response);
+      // Attaching the json va
+      res.json(response);
 
+    }
+    catch
+    {
+      res.send("Failed to validate video!");
+    }
 });
 
 app.get('/video-details', (req, res) => {
 
-const url = req.query.url;
+    const url = req.query.url;
 
-// Attaching the header to the response
-res.header('Video-Details');
+    // Attaching the header to the response
+    res.header('Video-Details');
 
-// Getting required video details
-ytdl.getInfo(url).then((info) => {
+    // Getting required video details
+    ytdl.getInfo(url).then((info) => {
 
-    const data = {
-    title:          info.title,
-    channelName:    info.author.name,
-    uploadDate:     parseDateFromEpochToString(info.published),
-    thumbnailURL:      parseVideoThumbnailURL(info.video_id),
-    qualityOptions: parseVideoQualities(info.formats),
-    };
+        const data = {
+          title:          info.title,
+          channelName:    info.author.name,
+          uploadDate:     parseDateFromEpochToString(info.published),
+          thumbnailURL:      parseVideoThumbnailURL(info.video_id),
+          qualityOptions: parseVideoQualities(info.formats),
+        };
 
-    // Attaching the json va
-    res.json(data);
+        // Attaching the json va
+        res.json(data);
 
-    return null;
+        return null;
 
-}).catch(()=>{
+    }).catch(()=>{
 
-    console.log("Failed to get video details!")
+        res.send("Failed to get video details!");
+
+    });
 
 });
 
-});
-
-exports.app = functions.https.onRequest(app);
-exports.downloadVideo = functions.https.onRequest(app);
-exports.verifyURL = functions.https.onRequest(app);
-exports.videoDetails = functions.https.onRequest(app);
+exports.app = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
+exports.verifyURL = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
+exports.videoDetails = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
+exports.downloadVideo = functions.runWith({ timeoutSeconds: 300, memory: '512MB' }).https.onRequest(app);
