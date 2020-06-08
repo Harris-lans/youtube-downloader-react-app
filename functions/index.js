@@ -83,8 +83,8 @@ app.get('/verify-url', (req, res) => {
       // Attaching the json va
       res.json(response);
 
-    }
-    catch
+    } 
+    catch (error)
     {
       res.send("Failed to validate video!");
     }
