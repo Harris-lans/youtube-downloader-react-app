@@ -88,6 +88,7 @@ app.get('/verify-url', (req, res) => {
     {
       res.send(`Failed to validate video! Exception - ${error}`);
     }
+    
 });
 
 app.get('/video-details', (req, res) => {

@@ -9,7 +9,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const axios = require('axios').default;
-const serverURL = process.env.NODE_ENV === 'development' ? 'http://localhost:1300' : '';
+const streamSaver = require('streamsaver');
+const serverURL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000' : '';
 
 export default class App extends React.Component
 {
@@ -76,7 +77,17 @@ export default class App extends React.Component
 
 	requestVideoDownload(url, qualityTag)
 	{
-		window.location = `${serverURL}/download-video?videoURL=${url}&qualityTag=${qualityTag}`;
+		const fileStream = streamSaver.createWriteStream(`${this.state.videoTitle}.mp4`);
+
+		fetch(`${serverURL}/download-video?videoURL=${url}&qualityTag=${qualityTag}`).then((response) => {
+
+			const readableStream = response.body;
+
+			if (window.WritableStream && readableStream.pipeTo) 
+			{
+				return readableStream.pipeTo(fileStream);
+			}
+		});
 	}
 
 	handleOnURLChanged(value)
@@ -193,17 +204,17 @@ export default class App extends React.Component
 
 		return (
 
-		<div className="background">
-			<header className="app-header">Youtube Downloader</header>
-			<div className="app-body">
-			<Card>
-				<Card.Title>
-					<TextField label="URL" subText="Enter the URL of the video you want to download" inputMode="url" onChange={this.handleOnURLChanged.bind(this)}/>
-				</Card.Title>
-				{cardBody}
-			</Card>
+			<div className="background">
+				<header className="app-header">Youtube Downloader</header>
+				<div className="app-body">
+				<Card>
+					<Card.Title>
+						<TextField label="URL" subText="Enter the URL of the video you want to download" inputMode="url" onChange={this.handleOnURLChanged.bind(this)}/>
+					</Card.Title>
+					{cardBody}
+				</Card>
+				</div>
 			</div>
-		</div>
 
 		);
 	}
