@@ -60,9 +60,9 @@ app.get('/download-video', (req, res) => {
 
         return null;
 
-    }).catch(() => {
+    }).catch((exception) => {
 
-        res.send("Failed to download video!");
+        res.send(`Failed to download video! Exception - ${exception}`);
 
     });
 
@@ -86,7 +86,7 @@ app.get('/verify-url', (req, res) => {
     } 
     catch (error)
     {
-      res.send("Failed to validate video!");
+      res.send(`Failed to validate video! Exception - ${error}`);
     }
 });
 
@@ -113,9 +113,9 @@ app.get('/video-details', (req, res) => {
 
         return null;
 
-    }).catch(()=>{
+    }).catch((exception)=>{
 
-        res.send("Failed to get video details!");
+        res.send(`Failed to get video details! Exception - ${exception}`);
 
     });
 
