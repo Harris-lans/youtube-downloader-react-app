@@ -1,11 +1,9 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const ytdl = require('ytdl-core');
-const cors = require('cors');
 const path = require('path');
 
 const app = express();
-app.use(cors());
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -88,7 +86,7 @@ app.get('/verify-url', (req, res) => {
     {
       res.send(`Failed to validate video! Exception - ${error}`);
     }
-    
+
 });
 
 app.get('/video-details', (req, res) => {
