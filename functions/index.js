@@ -123,4 +123,4 @@ app.get('/video-details', (req, res) => {
 exports.app = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
 exports.verifyURL = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
 exports.videoDetails = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
-exports.downloadVideo = functions.runWith({ timeoutSeconds: 300, memory: '512MB' }).https.onRequest(app);
+exports.downloadVideo = functions.runWith({ timeoutSeconds: 300, memory: '2GB' }).https.onRequest(app);
