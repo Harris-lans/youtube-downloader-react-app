@@ -1,38 +1,21 @@
 const express = require('express');
 const ytdl = require('ytdl-core');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
 
+const port = 8080;
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-function parseDateFromEpochToString(epochTimestamp)
-{
-  const publishedDate = new Date(epochTimestamp);
-  return `${monthNames[publishedDate.getMonth()]} ${publishedDate.getDate()} ${publishedDate.getFullYear()}`;
-}
+app.use(express.static(path.join(__dirname, 'build')));
+app.use(cors());
 
-function parseVideoThumbnailURL(videoID)
-{
-  return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
-}
+app.listen(process.env.PORT || port, () => {
 
-function parseVideoQualities(formats)
-{
-  // Filtering out only video formats with itags
-  const firstPassFilteredQualities = formats.filter((element) => { return (element.container === "mp4" && element.qualityLabel !== null && element.audioBitrate !== null) });
-  const secondPassFilteredQualities = firstPassFilteredQualities.sort((a, b) => { return b.bitrate - a.bitrate });
-  const thirdPassFilteredQualities = secondPassFilteredQualities.map((element) => {
-    
-    return {
-      id : element.itag,
-      value : `${element.qualityLabel} ${Math.round(element.bitrate / 1000)} kbps`
-    };
+  console.log(`Server started at port ${process.env.PORT || port}`);
 
-  });
-
-  return thirdPassFilteredQualities;
-}
+});
 
 app.get('/', (req, res) => {
 
@@ -118,3 +101,31 @@ app.get('/video-details', (req, res) => {
     });
 
 });
+
+function parseDateFromEpochToString(epochTimestamp)
+{
+  const publishedDate = new Date(epochTimestamp);
+  return `${monthNames[publishedDate.getMonth()]} ${publishedDate.getDate()} ${publishedDate.getFullYear()}`;
+}
+
+function parseVideoThumbnailURL(videoID)
+{
+  return `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
+}
+
+function parseVideoQualities(formats)
+{
+  // Filtering out only video formats with itags
+  const firstPassFilteredQualities = formats.filter((element) => { return (element.container === "mp4" && element.qualityLabel !== null && element.audioBitrate !== null) });
+  const secondPassFilteredQualities = firstPassFilteredQualities.sort((a, b) => { return b.bitrate - a.bitrate });
+  const thirdPassFilteredQualities = secondPassFilteredQualities.map((element) => {
+    
+    return {
+      id : element.itag,
+      value : `${element.qualityLabel} ${Math.round(element.bitrate / 1000)} kbps`
+    };
+
+  });
+
+  return thirdPassFilteredQualities;
+}
