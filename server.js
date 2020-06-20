@@ -1,4 +1,3 @@
-const functions = require('firebase-functions');
 const express = require('express');
 const ytdl = require('ytdl-core');
 const path = require('path');
@@ -119,8 +118,3 @@ app.get('/video-details', (req, res) => {
     });
 
 });
-
-exports.app = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
-exports.verifyURL = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
-exports.videoDetails = functions.runWith({ timeoutSeconds: 60, memory: '256MB' }).https.onRequest(app);
-exports.downloadVideo = functions.runWith({ timeoutSeconds: 300, memory: '2GB' }).https.onRequest(app);

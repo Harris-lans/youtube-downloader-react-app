@@ -1,7 +1,0 @@
-{
-    "jshint.lintHTML": true,
-    "jshint.options": 
-    {
-        "esversion": 9
-    }
-}

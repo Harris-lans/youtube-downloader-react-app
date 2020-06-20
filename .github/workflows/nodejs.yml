@@ -5,8 +5,8 @@ on:
       - release/*
 
 jobs:
-  build:
-    name: Build
+  build-docker-image:
+    name: Build docker image and push to Amazon ECR 
     runs-on: ubuntu-latest
 
     strategy:
@@ -14,49 +14,24 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@master
-    - name: Using Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@master
+    - name: Checking out files
+      uses: actions/checkout@master
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@master
       with:
-        node-version: ${{ matrix.node-version }}
-    - name: Installing Dependencies
-      run: npm install
-    - name: Building Application
-      run: npm run build
-    - name: Preparing built files for uploading
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1
+    - id: login-aws-ecr 
+      name: Login into AWS ECR Service
+      uses: aws-actions/amazon-ecr-login@master
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: youtube-downloader
+        IMAGE_TAG: latest
       run: |
-        mkdir dist
-        cp -R build dist/
-        cp -R functions dist/
-        cp firebase.json dist/
-    - name: Uploading built files for distribution
-      uses: actions/upload-artifact@master
-      with:
-        name: dist
-        path: dist/*
-
-  deploy:
-      name: Deploy
-      needs: build
-      runs-on: ubuntu-latest
-
-      strategy:
-        matrix:
-          node-version: [12.x]
-
-      steps:
-        - uses: actions/setup-node@master
-          with:
-            node-version: ${{ matrix.node-version }}
-        - name: Setting up Firebase
-          run: npm install -g firebase-tools
-        - name: Downloading distribution files
-          uses: actions/download-artifact@master
-          with:
-              name: dist
-        - name: Deploying to Firebase
-          run: |
-            cd functions
-            npm install
-            cd ..
-            firebase deploy --project ${{secrets.FIREBASE_PROJECT_ID}} --token ${{secrets.FIREBASE_TOKEN}}
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    - name: Logout of AWS ECR Service
+      run: docker logout ${{ steps.login-ecr.outputs.registry }}
