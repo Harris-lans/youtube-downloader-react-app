@@ -25,9 +25,9 @@ jobs:
     - id: login-aws-ecr 
       name: Login into AWS ECR Service
       uses: aws-actions/amazon-ecr-login@master
-    - name: Build, tag, and push image to Amazon ECR
+    - name: Build, tag, and push image to AWS ECR
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: ${{ steps.login-aws-ecr.outputs.registry }}
         ECR_REPOSITORY: youtube-downloader
         IMAGE_TAG: latest
       run: |
