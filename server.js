@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const app = express();
 
-const port = 8080;
+const port = 80;
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 app.use(express.static(path.join(__dirname, 'build')));
