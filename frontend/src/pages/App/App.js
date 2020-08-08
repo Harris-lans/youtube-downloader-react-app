@@ -32,22 +32,18 @@ export class App extends React.Component
 		};
 	}
 
-	async queryURLValidity(videourl)
+	async queryURLValidity(url)
 	{
 		let isValid = false; 
 
-		if (!this.isStringEmpty(videourl))
+		if (!this.isStringEmpty(url))
 		{
-			const response = await axios.post(`${config.api.uri}/video`, {
+			const urlObject = new URL(`${config.api.uri}/video/verification`);
+			urlObject.search = new URLSearchParams({ url });
 
-				responseType: 'json',
-				params:{
-					url: videourl
-				}
-
-			});
-
-			isValid = response.data.isValid;
+			const response = await fetch(urlObject, { method: 'GET' });
+			const responseBody = await response.json();
+			isValid = responseBody.isValid;
 		}
 		
 		return isValid;
@@ -55,30 +51,26 @@ export class App extends React.Component
 
 	async getVideoDetails(url)
 	{
-		let options = {};
+		let details = {};
 
 		if (!this.isStringEmpty(url))
 		{
-			const response = await axios.options(`${config.api.uri}/video`, {
+			const urlObject = new URL(`${config.api.uri}/video/details`);
+			urlObject.search = new URLSearchParams({ url });
 
-				responseType: 'json',
-				params:{
-					url: url
-				}
-
-			});
-
-			options = response.data;
+			const response = await fetch(urlObject, { method: 'GET' });
+			const responseBody = await response.json();
+			details = responseBody;
 		}
 
-		return options;
+		return details;
 	}
 
 	downloadVideo(url, qualityTag)
 	{
 		const fileStream = streamSaver.createWriteStream(`${this.state.videoTitle}.mp4`);
 
-		fetch(`${config.api.uri}/video?videoURL=${url}&qualityTag=${qualityTag}`, { method: "GET" }).then((response) => {
+		fetch(`${config.api.uri}/video`, { method: "GET", body: { url, quality_tag: qualityTag } }).then((response) => {
 
 			const readableStream = response.body;
 
@@ -96,7 +88,7 @@ export class App extends React.Component
 			url : url,
 			isValidating : true
 		});
-
+		
 		// Checking if the url is valid and getting download options
 		this.queryURLValidity(url).then((isValid) => 
 		{

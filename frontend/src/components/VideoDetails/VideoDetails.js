@@ -2,7 +2,7 @@ import './style.css';
 import React from 'react';
 import Image from 'react-bootstrap/Image';
 
-export default class VideoDetails extends React.Component
+export class VideoDetails extends React.Component
 {
     render()
     {

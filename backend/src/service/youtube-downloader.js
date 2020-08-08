@@ -40,7 +40,7 @@ module.exports = {
         {
             return ytdl.validateURL(url);
         }
-        catch
+        catch(error)
         {
             throw new Error('Verifying process of URL failed');
         }
@@ -53,7 +53,7 @@ module.exports = {
     
             if (isVerified)
             {
-                const info = await ytdl.getInfo(url).catch(() => { throw new Error('Failed to retrieve video details') });
+                const info = await ytdl.getInfo(url);
 
                 return {
 
@@ -65,9 +65,9 @@ module.exports = {
                 };
             }
         }
-        catch (error)
+        catch(error)
         {
-            throw error;
+            throw new Error('Failed to retrieve video details');
         }
     },
     createVideoDataStream: async function(url, qualityTag)
@@ -81,7 +81,7 @@ module.exports = {
                 stream: ytdl(url, { quality: qualityTag }) 
             };
         }
-        catch
+        catch(error)
         {
             throw new Error("Failed creating video stream")
         }

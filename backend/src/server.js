@@ -5,11 +5,13 @@ const { PORT } = require('./config');
 const { errorHandler } = require('./middleware');
 const { routes } = require('./api');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const app = express();
 
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../../frontend/build')));
+app.use(bodyParser.json());
 app.use(cors());
 routes(app);
 app.use(errorHandler);
