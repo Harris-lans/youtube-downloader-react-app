@@ -1,0 +1,106 @@
+@import url(https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap);
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand|Sen&display=swap');
+
+*
+{
+  color: white;
+}
+
+.background
+{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  background-color: #000000;
+  background-image: url("/background.png");
+  background-attachment: fixed;
+}
+
+.app-header
+{
+  color: white;
+  text-align: center;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 40pt;
+  width: 100%;
+  padding: 1rem;
+}
+
+.app-body
+{
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1.2rem;
+}
+
+.app-body .card-title
+{
+  margin: 2rem;
+}
+
+.app-body .card-body
+{
+  margin: 0.75rem;
+}
+
+.app-body .card
+{
+  display: inline-block;
+  border-radius: 10px;
+  width: 50vw;
+  background-color: rgba(37, 37, 37, 0.75);
+  vertical-align: middle;
+}
+
+.options-container
+{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: flex-start;
+  justify-content: flex-start;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.options-container .list-select::after
+{
+  content: '';
+  width: 3rem;
+}
+
+.button-container
+{
+  text-align: center;
+}
+
+.invalidity-message
+{
+  text-align: center;
+  font-family: 'Sen', sans-serif;
+  color: #ff2a2a;
+  font-size: 1.3rem;
+}
+
+.inline-block
+{
+  display: inline-block;
+}
+
+.loading-spinner-box
+{
+  display: flex;
+}
+
+.loading-spinner-box *
+{
+  font-family: 'Sen', sans-serif;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+}

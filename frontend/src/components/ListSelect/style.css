@@ -1,0 +1,21 @@
+.form-control
+{
+    width: 50%;
+}
+
+.dropdown-container
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.dropdown-group
+{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dropdown-item
+{
+    color: black;
+}
