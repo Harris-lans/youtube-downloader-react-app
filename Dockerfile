@@ -4,6 +4,10 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install && npm run build
+RUN cd frontend && npm install && npm run build
 
-CMD [ "node", "server.js" ]
+WORKDIR /usr/src/app/backend
+
+RUN npm install
+
+CMD npm start
