@@ -66,25 +66,23 @@ export class App extends React.Component
 	}
 
 	async downloadVideo(videoURL, qualityTag)
-	{
-		const fileStream = streamSaver.createWriteStream(`${this.state.videoTitle}.mp4`);
-		
+	{	
 		const url = new URL(`${config.api.uri}/video`);
 		url.search = new URLSearchParams({ url: videoURL, quality_tag: qualityTag });
 
-		fetch(url, { method: "GET" }).then((response) =>
+		const response = await fetch(url, { method: "GET" });
+		
+		// Creating file stream
+		const contentHeader = response.headers.get('content-disposition');
+		const fileName = contentHeader.match(/filename\*?=['"]?(?:UTF-\d['"]*)?([^;\r\n"']*)['"]?;?/)[1];
+		const fileStream = streamSaver.createWriteStream(fileName);
+
+		const readableStream = response.body;
+
+		if (window.WritableStream && readableStream.pipeTo) 
 		{
-			for (let pair of response.headers.entries())
-			{
-				console.log(pair);
-			}
-			const readableStream = response.body;
-	
-			if (window.WritableStream && readableStream.pipeTo) 
-			{
-				return readableStream.pipeTo(fileStream);
-			}
-		});
+			return readableStream.pipeTo(fileStream);
+		}
 	}
 
 	handleOnURLChanged(value)
