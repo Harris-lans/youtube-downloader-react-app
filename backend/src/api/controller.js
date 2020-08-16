@@ -46,8 +46,8 @@ module.exports = {
     {
         try
         {
-            const { fileName, stream } = await youtubeDownloaderService.createVideoDataStream(request.query.url, request.query.quality_tag);
-            response.header('Content-Disposition', `attachment; filename="${fileName}.mp4"`);
+            const { fileName, stream } = await youtubeDownloaderService.createVideoDataStream(request.query.url, Number.parseInt(request.query.quality_tag));
+            response.attachment(fileName);
             stream.pipe(response); 
         }
         catch(error)

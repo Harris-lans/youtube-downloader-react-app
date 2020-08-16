@@ -2,12 +2,12 @@
 
 const ytdl = require('ytdl-core');
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 function parseDateFromEpochToString(epochTimestamp)
 {
   const publishedDate = new Date(epochTimestamp);
-  return `${monthNames[publishedDate.getMonth()]} ${publishedDate.getDate()} ${publishedDate.getFullYear()}`;
+  return `${months[publishedDate.getMonth()]} ${publishedDate.getDate()} ${publishedDate.getFullYear()}`;
 }
 
 function parseVideoThumbnailURL(videoID)
@@ -53,14 +53,14 @@ module.exports = {
     
             if (isVerified)
             {
-                const info = await ytdl.getInfo(url);
+                const info = await ytdl.getInfo(url, { filter: 'audioandvideo' });
 
                 return {
 
-                    title:          info.title,
-                    channelName:    info.author.name,
-                    uploadDate:     parseDateFromEpochToString(info.published),
-                    thumbnailURL:   parseVideoThumbnailURL(info.video_id),
+                    title:          info.videoDetails.title,
+                    channelName:    info.videoDetails.author.name,
+                    uploadDate:     parseDateFromEpochToString(info.videoDetails.publishDate),
+                    thumbnailURL:   parseVideoThumbnailURL(info.videoDetails.videoId),
                     qualityOptions: parseVideoQualities(info.formats),
                 };
             }
@@ -74,7 +74,7 @@ module.exports = {
     {
         try
         {
-            const info = await this.getVideoDetails();
+            const info = await this.getVideoDetails(url);
             
             return {
                 fileName: `${info.title}.mp4`,

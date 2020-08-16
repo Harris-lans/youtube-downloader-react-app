@@ -12,7 +12,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '../../frontend/build')));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({exposedHeaders: ['Content-Disposition']}));
 routes(app);
 app.use(errorHandler);
 

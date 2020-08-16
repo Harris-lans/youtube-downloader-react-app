@@ -1,5 +1,4 @@
 import './style.css';
-import axios from 'axios';
 import React from 'react';
 import config from '../../config';
 import streamSaver from 'streamsaver';
@@ -32,16 +31,16 @@ export class App extends React.Component
 		};
 	}
 
-	async queryURLValidity(url)
+	async queryURLValidity(videoURL)
 	{
 		let isValid = false; 
 
-		if (!this.isStringEmpty(url))
+		if (!this.isStringEmpty(videoURL))
 		{
-			const urlObject = new URL(`${config.api.uri}/video/verification`);
-			urlObject.search = new URLSearchParams({ url });
+			const url = new URL(`${config.api.uri}/video/verification`);
+			url.search = new URLSearchParams({ url: videoURL });
 
-			const response = await fetch(urlObject, { method: 'GET' });
+			const response = await fetch(url, { method: 'GET' });
 			const responseBody = await response.json();
 			isValid = responseBody.isValid;
 		}
@@ -49,16 +48,16 @@ export class App extends React.Component
 		return isValid;
 	}
 
-	async getVideoDetails(url)
+	async getVideoDetails(videoURL)
 	{
 		let details = {};
 
-		if (!this.isStringEmpty(url))
+		if (!this.isStringEmpty(videoURL))
 		{
-			const urlObject = new URL(`${config.api.uri}/video/details`);
-			urlObject.search = new URLSearchParams({ url });
+			const url = new URL(`${config.api.uri}/video/details`);
+			url.search = new URLSearchParams({ url: videoURL });
 
-			const response = await fetch(urlObject, { method: 'GET' });
+			const response = await fetch(url, { method: 'GET' });
 			const responseBody = await response.json();
 			details = responseBody;
 		}
@@ -66,14 +65,21 @@ export class App extends React.Component
 		return details;
 	}
 
-	downloadVideo(url, qualityTag)
+	async downloadVideo(videoURL, qualityTag)
 	{
 		const fileStream = streamSaver.createWriteStream(`${this.state.videoTitle}.mp4`);
+		
+		const url = new URL(`${config.api.uri}/video`);
+		url.search = new URLSearchParams({ url: videoURL, quality_tag: qualityTag });
 
-		fetch(`${config.api.uri}/video`, { method: "GET", body: { url, quality_tag: qualityTag } }).then((response) => {
-
+		fetch(url, { method: "GET" }).then((response) =>
+		{
+			for (let pair of response.headers.entries())
+			{
+				console.log(pair);
+			}
 			const readableStream = response.body;
-
+	
 			if (window.WritableStream && readableStream.pipeTo) 
 			{
 				return readableStream.pipeTo(fileStream);
